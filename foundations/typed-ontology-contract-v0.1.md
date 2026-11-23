@@ -1,58 +1,85 @@
-# WP-TRT2-001: Typed ontology contract (candidate v0.1)
+# WP-TRT2-001: Typed ontology and TO-1 contract (candidate v0.2)
 
-**Status:** proposed definitions; not a proof of TRT's ontological necessity.  
-**Owner:** Research Architect / Integration Lead.  
-**Scope:** formal interface contract for TRT-M0, subject to Claude's construction and Muse's independent review.
+**Status:** proposed definitions and conditional proof contract, awaiting independent review and governed merge.  
+**Owner:** Research Architect / Integration Lead (thinx-gpt).  
+**Inputs:** Claude's TO-1 v0.2 proposal (ai-bridge, 2026-11-22); Muse's independent audit in `validation/to1-contract-v02-vv-audit.md`.  
+**Research Principal ruling:** L3 operates as an admissibility filter over a wider candidate-model sort.  
+**Claim status:** no independently verified TRT theorem claimed by this document.
 
-## Distinct sorts
+## 1. Typed ontology
 
-| Symbol | Sort | Meaning |
+| Symbol | Sort | Role |
 |---|---|---|
-| `Σ` | `Syntax` | Well-formed descriptions of a fixed, explicitly defined language. Unbounded expressibility does not imply semantic satisfaction. |
-| `M` | `Model` | Classical structures for that language, with a declared satisfaction relation `M ⊨ s`. |
-| `Ω_L3` | `Set Model` or specified class | Coherent interpretations under the chosen logic and signature. Self-reference requires a specified truth theory; no unrestricted truth predicate is assumed. |
-| `Q` | `PhysicalState` | Operational physical states (e.g., density operators on a specified Hilbert space), distinct from models. |
-| `E` | `Event` | Candidate actualization events carrying outcomes and measurement/instrument context. |
-| `H` | `History` | Finite compatible records, including event identity, context, and causal provenance. |
-| `χ` | `Actuality` | Determinate record or history; no identity with `Q` or `M` is presumed. |
+| `Σ∞` | `Syntax` | Well-formed representable descriptions, including inconsistent descriptions. Syntax is distinct from semantics. |
+| `Model` | candidate semantic valuations | A wider class of representable valuations, potentially failing the L3 filter. |
+| `L3 : Model → Prop` | predicate | Admissibility filter; `Ω_L3 := {M : Model | L3(M)}`. |
+| `Sat : Model × Syntax → Prop` | relation | Interpretation of syntactic descriptions by candidate models. For an incoherent candidate, `Sat` need not be classical satisfaction. |
+| `Q` | `PhysicalState` | Operational states, distinct from syntactic and semantic sorts. |
+| `E` | `Event` | Candidate actualization events, including measurement context where applicable. |
+| `Rec` | `Record` | Typed record contents, encoded into syntax by `enc : Rec → Syntax`. |
+| `H` | `History` | Raw histories, including inconsistent histories; consistency is a substantive predicate, not a subtype constraint. |
+| `χ` | `Actuality` | For TRT-M0, an actualized **history**; a record is a projection of that history, not an alternative sort for χ. |
 
-`I∞` names the proposed ontological source of representability. It is not identified without argument with any one mathematical set above. `L3` names logical admissibility, not a physical force. `𝒜₀` names primitive actualization, not automatically a quantum instrument.
+The model-theoretic admissibility filter for a set of descriptions `Γ ⊆ Σ∞` is `Mod_L3(Γ) := {M : Model | L3(M) ∧ ∀ s ∈ Γ, Sat(M,s)}`. Thus `Σ_adm := {s : Syntax | Mod_L3({s}) ≠ ∅}`. This avoids an undefined `Coherent(M)` predicate and preserves the possibility of syntactically representable contradictions that no L3 model realizes. A language with a truth predicate or self-reference must define its semantics and restrictions explicitly.
 
-## Typed maps and relations
+The candidate physical interpretation is a **partial relation** `Interp : Q → Model → Prop`; neither totality, injectivity nor surjectivity is assumed. Any physical theory or instrument used to construct `Q` must be declared as an **imported operational postulate**, including probability distributions or Born-rule weights. These imports do not discharge TO-2.
 
-1. Satisfaction: `Sat : Model × Syntax → Prop`.
-2. Admissible syntax: `Σ_adm := {s : Syntax | ∃ M : Model, Sat(M,s) ∧ Coherent(M)}`.
-3. Interpretation: `ι : PhysicalState → Model` **only where a specified interpretation exists**; otherwise use a partial map or relation `Interpret ⊆ PhysicalState × Model`. Neither surjectivity nor injectivity is assumed.
-4. Operational update: `Instrument : PhysicalState × MeasurementContext → Distribution(Outcome × PhysicalState)`, when the selected physical theory supplies such an instrument.
-5. Ontological transition: `Actualize : History × PhysicalState × Event ⇀ History × PhysicalState`, a partial relation/function requiring independently declared compatibility and dynamical admissibility.
-6. Projection: `record : History → FiniteSet(Record)` and `Cons : History → Prop`, with record identity and context fixed before consistency proofs.
+The compact ontological expression `χ ≡ 𝒜₀(I∞ | L3)` remains a schema until an instance supplies its typed interpretation. `I∞` is not identified by definition with `Syntax` or `Model`.
 
-The compact expression `χ ≡ 𝒜₀(I∞ | L3)` is an ontological schema, not a well-typed executable equation until a particular model supplies the interpretations of all terms.
+## 2. TO-1 instance schema
 
-## TO-1 proof contract
+An instance supplies sorts `H, Q, E, Rec, Model`, `L3 : Model → Prop`, `records : H → List Rec`, `recOf : E → Rec`, `SatRec : Model → Rec → Prop`, `Interp : Q → Model → Prop`, and `Step : H → Q → E → H → Q → Prop`. The semantic bridge is `SatRec(M,r) := Sat(M, enc(r))`. Claude's Lean v0.2 schema leaves `Syntax` and `enc` implicit; TRT-M0 **must instantiate them explicitly** to satisfy the repository-wide syntax/semantics distinction (A1).
 
-Specify `Adm(h,q,e)` without defining it merely as `Cons(Actualize(h,q,e))`. Establish a base history `h₀`, an explicit transition rule, and a nonempty reachable event sequence. Then prove conditionally:
+Define:
+
+```text
+Cons(h) :=
+  ∃ M, L3(M) ∧ ∀ r ∈ records(h), SatRec(M,r)
+
+Adm(h,q,e) :=
+  ∃ M, L3(M) ∧ Interp(q,M) ∧
+       (∀ r ∈ records(h), SatRec(M,r)) ∧ SatRec(M,recOf(e))
+```
+
+`Adm` is specified without reference to `Step` or `Cons`. The semantic independence of `Interp` and `SatRec` from the desired result remains an external modeling/review obligation.
+
+### Transition conditions
+
+- **C1, preservation:** every record of `h` occurs in `h′` whenever `Step(h,q,e,h′,q′)`.
+- **C2, progress:** `recOf(e)` occurs in `h′` whenever that step occurs.
+- **C3, no junk:** each record of `h′` was already in `h` or equals `recOf(e)`.
+
+Together C1–C3 establish set-valued record closure, `records(h′) = records(h) ∪ {recOf(e)}`. A sequence of steps yields the analogous finite union; multiplicities/order are **not** fixed by these conditions. This closure statement needs its own machine-checked proof before being promoted.
+
+### Non-triviality obligations on each concrete instance
+
+- **N1:** some raw history is inconsistent.
+- **N2:** some step from a consistent history lands in an inconsistent history, demonstrating that `Adm` is load-bearing.
+- **N3:** at least one admissible step exists from a consistent history.
+- **N4:** some step lands in a consistent history but is inadmissible due to the current-state interpretation; this distinguishes `Adm` extensionally from consistency after the step.
+- **L0:** some representable candidate model fails `L3`.
+- **N5:** some raw history is satisfied by a candidate model but by no L3 model.
+
+N4 is **necessary but insufficient** to establish meaningful semantic independence. The chosen `Interp` must have separately justified physical content.
+
+### Conditional TO-1
 
 ```text
 Cons(h₀) ∧
-(∀ k < n, Adm(hₖ,qₖ,eₖ) ∧ Actualize(hₖ,qₖ,eₖ) = (hₖ₊₁,qₖ₊₁))
-⇒ Cons(hₙ)
+(∀ k < n, Adm(hₖ,qₖ,eₖ) ∧ Step(hₖ,qₖ,eₖ,hₖ₊₁,qₖ₊₁))
+⇒ Cons(hₙ).
 ```
 
-An inductive proof is only as substantive as the independently justified admissibility and transition rules. Record the assumptions, possible countermodels, and whether the theorem imports quantum postulates.
+**A2, exact proof content:** for `n ≥ 1`, the final admissibility witness satisfies every earlier record and the new event. C3 ensures there are no additional records in the successor, hence `Cons(hₙ)`. This is the one-step lemma; the induction is presentational. Under C1–C3, admissibility plus a step implies consistency of the extension. Conversely, consistency of the extension does not imply admissibility, because `Interp(q,M)` may fail (N4). The theorem's substantive burden lies in demonstrating instance conformance and a justified interpretation, rather than in the abstract induction.
 
-## Open design decisions for TRT-M0
+## 3. Machine-checking evidence and scope
 
-- Specify a finite language/signature and satisfaction relation; do not assume unrestricted classical truth for self-referential syntax.
-- Choose whether histories are ordered sequences, causal partial orders, or both; prove that extensions preserve earlier records.
-- Separate record consistency from agreement between different observers' measurement contexts.
-- Identify the physical-state interpretation relation and its limits, including quantum contextuality.
-- Specify whether actualization is stochastic, relational, or deterministic, without presupposing the Born rule.
-- Track three independent TO-3 obligations: no-signaling, Lorentz covariance, and microcausality.
-- Audit whether a candidate theorem demonstrates new TRT-specific content or merely re-expresses assumptions from operational quantum mechanics.
+Claude supplied a Lean 4 core companion `TO1v02` with a conforming four-valued toy valuation, the conditional theorem, and rejected degenerate witnesses (reset, no-op, consistent-by-type, unconstrained interpretation, empty interpretation, vacuous L3 filter). Muse reports independent reproduction using Lean 4.28.0 in `validation/to1-contract-v02-vv-audit.md`. The toy's physical states are classical partial specifications; it is **not** TRT-M0 and does not establish quantum physical adequacy. The Lean companion is to be added to the pinned formalization project by WP-TRT2-002 with proof dependency and axiom evidence.
 
-## Review acceptance
+**Outstanding:** F3 explicitly label operational distribution as imported; F4 give event records contextual semantics, compatibility and causal ordering before quantum implementation. TO-3 no-signaling, covariance, and microcausality remain separate obligations. Identity in the four-valued toy is inherited from the metatheory and is not independently established as a filter constraint. TO-2 Born probabilities/outcome selection and TO-6 physical admissibility remain open.
 
-Claude: confirm formal implementability and return exact type mismatches. Muse: construct negative tests and independently audit non-circularity. No claim status is promoted to theorem on the basis of this document.
+## 4. Review acceptance
+
+Claude: implementability and type compatibility, including explicit `Syntax` and `enc` in TRT-M0. Muse: independent audit of the revised contract, non-circularity, context semantics, and negative tests. No claim status promotion in this PR. Preserve the HCAE attribution.
 
 Human-Curated, AI-Enabled (HCAE)
