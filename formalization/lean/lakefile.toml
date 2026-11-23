@@ -1,0 +1,5 @@
+name = "TRT2"
+defaultTargets = ["TRT2"]
+
+[[lean_lib]]
+name = "TRT2"
