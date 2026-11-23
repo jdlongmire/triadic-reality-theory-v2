@@ -77,7 +77,7 @@ Cons(h₀) ∧
 
 Claude supplied a Lean 4 core companion `TO1v02` with a conforming four-valued toy valuation, the conditional theorem, and rejected degenerate witnesses (reset, no-op, consistent-by-type, unconstrained interpretation, empty interpretation, vacuous L3 filter). Muse reports independent reproduction using Lean 4.28.0 in `validation/to1-contract-v02-vv-audit.md`. The toy's physical states are classical partial specifications; it is **not** TRT-M0 and does not establish quantum physical adequacy. The Lean companion is to be added to the pinned formalization project by WP-TRT2-002 with proof dependency and axiom evidence.
 
-**Outstanding:** F3 explicitly label operational distribution as imported; F4 give event records contextual semantics, compatibility and causal ordering before quantum implementation. TO-3 no-signaling, covariance, and microcausality remain separate obligations. Identity in the four-valued toy is inherited from the metatheory and is not independently established as a filter constraint. TO-2 Born probabilities/outcome selection and TO-6 physical admissibility remain open.
+**Outstanding implementation obligations:** Apply the already-established F3 imported-distribution labelling rule in each concrete instrument; F4 requires contextual event-record semantics, compatibility and causal ordering before quantum implementation. TO-3 no-signaling, covariance, and microcausality remain separate obligations. Identity in the four-valued toy is inherited from the metatheory and is not independently established as a filter constraint. TO-2 Born probabilities/outcome selection and TO-6 physical admissibility remain open.
 
 ## 4. Explicit TO-1 instance acceptance gate
 
