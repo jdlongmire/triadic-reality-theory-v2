@@ -13,3 +13,23 @@ jobs:
           python-version: "3.x"
       - name: Governance check
         run: python3 tools/check_governance.py
+  lean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install elan (toolchain comes from formalization/lean/lean-toolchain)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          bash elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build
+        working-directory: formalization/lean
+        run: lake build
+      - name: Proof gate (toolchain pin, source scan, definition and statement pins, axiom allowlist)
+        run: python3 tools/check_lean_proofs.py
+      - name: Dependency graph
+        working-directory: formalization/lean
+        run: lake env lean DepGraph.lean
