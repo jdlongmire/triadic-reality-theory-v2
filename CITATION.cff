@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+title: "Triadic Reality Theory v2: Logic, Information, and Action as Irreducible Co-Primitives of Determinate Actuality"
+message: "If you use this work, please cite it as below."
+type: software
+authors:
+  - family-names: Longmire
+    given-names: James D.
+    orcid: "https://orcid.org/0009-0009-1383-7698"
+    email: jdlongmire@outlook.com
+    affiliation: "Sr. Technical Fellow, Aerospace & Defense Sector"
+version: "2.0.0-candidate.1"
+date-released: "2026-11-22"
+url: "https://github.com/jdlongmire/triadic-reality-theory-v2"
+abstract: >
+  Triadic Reality Theory v2 is the candidate canonical repository for a
+  foundational-ontology research programme built on three irreducible
+  co-primitives: L3 as ontological logical constraint, I-infinity as
+  unbounded informational representability, and A as fundamental state
+  transition. Representability, admissibility, actualizability, and
+  actuality are kept distinct and separately typed. This repository is a
+  candidate, not yet promoted; the v1 repository remains the authoritative
+  historical baseline until a JD-approved promotion ADR.
+preferred-citation:
+  type: article
+  title: "Triadic Reality Theory: Logic, Information, and Action as Irreducible Co-Primitives of Determinate Actuality"
+  authors:
+    - family-names: Longmire
+      given-names: James D.
+      orcid: "https://orcid.org/0009-0009-1383-7698"
+      affiliation: "Sr. Technical Fellow, Aerospace & Defense Sector"
+  year: 2026
+  notes: "Cite v1 for the historical baseline; cite v2 as candidate canonical, version 2.0.0-candidate.1."
