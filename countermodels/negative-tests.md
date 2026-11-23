@@ -18,4 +18,25 @@ Take one physical event recorded under two different measurement contexts with i
 
 Re-express the two LRT audit counterexamples (constant frame function; constant-nonActual) against any v2 axiom that plays a similar structural role. Expected sound result: the axiom either excludes the constant construction by an explicit hypothesis or is recorded as inconsistent and removed. This test is the standing regression test for governance/integrity-findings.md, finding 1.
 
+
+## NT-5: No-op operator (targets TO-1 via C2)
+
+Define Step so the successor history equals the current one. TO-1's consistency conclusion holds trivially, but no event is ever recorded. Machine-checked against the v0.2 contract: noop_rejected, the no-op fails C2 (progress). Source: thinx-claude's v0.2 draft, adopted into this suite 2026-11-22.
+
+## NT-6: Unconstrained interpretation (targets Adm, via N4)
+
+Define Interp to hold for every state and model. Adm then collapses to consistency of the extension, and admissibility does no physical work. Machine-checked: circ_rejected, fails N4. Source: v0.2 draft.
+
+## NT-7: Empty interpretation (targets TO-1 vacuity, via N3)
+
+Define Interp to hold for nothing. Adm never holds and TO-1 is vacuous. This is the concrete form of NT-2. Machine-checked: empty_rejected, fails N3. Source: v0.2 draft.
+
+## NT-8: Histories consistent by type (targets N1)
+
+Define the history type as a subtype of consistent records, so no inconsistent history exists and Cons is not a real predicate. Machine-checked: subtype_rejected, fails N1. Source: v0.2 draft (the consistent-by-type case from the PR #2 reviews).
+
+## NT-9: Trivial L3 filter (targets L0)
+
+Define L3 to hold of every candidate model, the built-in option the Research Principal ruled out on 2026-11-22. The filter excludes nothing and representable-but-not-actualizable collapses. Machine-checked: builtin_rejected, fails L0. Source: v0.2 draft.
+
 Human-Curated, AI-Enabled (HCAE)
